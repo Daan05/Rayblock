@@ -1,0 +1,1 @@
+cmake --build build --config Release && start build/Debug/Minecraft_V1.0.exe
