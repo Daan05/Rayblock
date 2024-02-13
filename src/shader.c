@@ -2,6 +2,7 @@
 
 unsigned int createShaderProgram(const char* vertexShaderPath, const char* fragmentShaderPath)
 {
+    // read vertex shader code
     char* vShaderCode;
     FILE *fp1 = fopen(vertexShaderPath, "r");
     if (fp1 != NULL) {
@@ -28,6 +29,7 @@ unsigned int createShaderProgram(const char* vertexShaderPath, const char* fragm
         fclose(fp1);
     }
 
+    // read fragment shader code
     char* fShaderCode;
     FILE *fp2 = fopen(fragmentShaderPath, "r");
     if (fp2 != NULL) {
@@ -54,7 +56,7 @@ unsigned int createShaderProgram(const char* vertexShaderPath, const char* fragm
         fclose(fp2);
     }
 
-    // 2. compile shaders
+    // compile shaders
     unsigned int vertex, fragment;
     // vertex shader
     vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -121,6 +123,7 @@ unsigned int createVAO()
 
 unsigned int createVBO()
 {
+    // these vertices make a rect that completely fill out screen
     float vertices[] = {
         -1.0, -1.0,
          1.0, -1.0,
@@ -136,6 +139,7 @@ unsigned int createVBO()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // layout (position = 0) in vec2 aPos;
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
