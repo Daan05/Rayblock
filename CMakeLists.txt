@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.24)
 
-project(Minecraft_V1.0 VERSION 1.0)
+project(Rayblock VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
