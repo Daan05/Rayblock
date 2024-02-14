@@ -1,6 +1,6 @@
 if exist build\ (
     cmake --build build && start build/Debug/Rayblock.exe
 ) else (
-    md build
+    cmake -B build
     cmake --build build && start build/Debug/Rayblock.exe
 )

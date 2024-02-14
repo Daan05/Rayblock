@@ -7,11 +7,17 @@
 
 #include "shader.h"
 
+static unsigned int windowW = 1280;
+static unsigned int windowH = 720;
+
+static char firstClick = 1;
+static float sensitivity = 100;
+
 struct Vec3 {
     float x;
     float y; 
     float z;
-} camPos;
+} camPos, orientation, newOrientation;
 
 GLFWwindow* initGLFW(int width, int heigth);
 void initGLAD();
