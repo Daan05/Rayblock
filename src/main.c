@@ -24,10 +24,6 @@ int main()
     unsigned int VAO = createVAO();
     unsigned int VBO = createVBO();
 
-    camPos.x = 0.0;
-    camPos.y = 6.0; 
-    camPos.z = -14.0;
-
     // main loop
     while(!glfwWindowShouldClose(window))
     {

@@ -22,6 +22,10 @@ GLFWwindow* initGLFW(int width, int heigth)
     glfwSwapInterval(0); // vsync off
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    camPos.x = 2.0;
+    camPos.y = 2.0;
+    camPos.z = -5.0;
+
     return window;
 }
 
@@ -47,7 +51,7 @@ void processInput(GLFWwindow* window)
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
-        camPos.x += 0.1;
+        //camPos.x += 0.1;
     }
 
     // check other inputs
