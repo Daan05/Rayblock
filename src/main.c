@@ -29,7 +29,13 @@ int main()
         // handle input
         processInput();
 
+        // set uniforms
+        setVec3(shader, "camPos", 0.0, 6.0, -14.0);         // player location
+        setVec3(shader, "orientation", 0.0, -0.5, 1.0);     // direction player is looking
+
         // draw frame
+        // for now just a simple scene
+        // later voxel engine with a datastructure
         clearScreen();
         glDrawArrays(GL_TRIANGLES, 0, 6);
 

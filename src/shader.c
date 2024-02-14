@@ -76,9 +76,9 @@ unsigned int createShaderProgram(const char* vertexShaderPath, const char* fragm
     checkCompileErrors(ID, "PROGRAM");
     // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertex);
-    free(vShaderCode);
+    free(vShaderCode); // memory leak = bad
     glDeleteShader(fragment);
-    free(fShaderCode);
+    free(fShaderCode); // memory leak = bad
 
     return ID;
 }
@@ -86,6 +86,11 @@ unsigned int createShaderProgram(const char* vertexShaderPath, const char* fragm
 void useShader(unsigned int shader)
 {
     glUseProgram(shader);
+}
+
+void setVec3(unsigned int shader, const char* name, float x, float y, float z)
+{
+    glUniform3f(glGetUniformLocation(shader, name), x, y, z);
 }
 
 void checkCompileErrors(unsigned int shader, const char* type)
