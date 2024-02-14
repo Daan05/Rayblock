@@ -6,13 +6,16 @@
 #include "application.h"
 #include "shader.h"
 
-unsigned int wWidth = 1280;
-unsigned int wHeight = 720;
+unsigned int wWidth = 800;
+unsigned int wHeight = 600;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 int main()
 {
     // create window
     GLFWwindow* window = initGLFW(wWidth, wHeight);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     initGLAD();
 
     // create shader
@@ -30,8 +33,9 @@ int main()
         processInput();
 
         // set uniforms
-        setVec3(shader, "camPos", 0.0, 6.0, -14.0);         // player location
-        setVec3(shader, "orientation", 0.0, -0.5, 1.0);     // direction player is looking
+        setVec2(shader, "screenDimensions", (float)wWidth, (float)wHeight);    // screen dimensions
+        setVec3(shader, "camPos", 0.0, 6.0, -14.0);             // player location
+        setVec3(shader, "orientation", 0.0, -0.5, 1.0);         // direction player is looking
 
         // draw frame
         // for now just a simple scene
@@ -46,4 +50,11 @@ int main()
 
     // clean up glfw
     cleanup();
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    wWidth = width;
+    wHeight = height;
+    glViewport(0, 0, wWidth, wHeight);
 }

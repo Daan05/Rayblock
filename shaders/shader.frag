@@ -1,6 +1,7 @@
 #version 460 core
 out vec4 FragColor;
 
+uniform vec2 screenDimensions;
 uniform vec3 camPos;
 uniform vec3 orientation;
 
@@ -30,8 +31,8 @@ vec3 calculateLighting(Ray ray, Hit hit);
 
 void main()
 {
-    vec2 uv = (vec2(gl_FragCoord.x / 1280, gl_FragCoord.y / 720.0) - 0.5) * 2; // uv [-1, 1]
-    uv.x *= 1.77777777778;
+    vec2 uv = (vec2(gl_FragCoord.x / screenDimensions.x, gl_FragCoord.y / screenDimensions.y) - 0.5) * 2; // uv [-1, 1]
+    uv.x *= screenDimensions.x / screenDimensions.y;
     vec3 color = vec3(0.1);
 
     Ray ray;

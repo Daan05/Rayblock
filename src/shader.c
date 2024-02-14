@@ -88,6 +88,11 @@ void useShader(unsigned int shader)
     glUseProgram(shader);
 }
 
+void setVec2(unsigned int shader, const char* name, float x, float y)
+{
+    glUniform2f(glGetUniformLocation(shader, name), x, y);
+}
+
 void setVec3(unsigned int shader, const char* name, float x, float y, float z)
 {
     glUniform3f(glGetUniformLocation(shader, name), x, y, z);
