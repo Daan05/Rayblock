@@ -8,11 +8,12 @@
 #include "shader.h"
 
 struct vec3 {
-    float x = 0.0;
-    float y = 6.0; 
-    float z = -14.0;
-} camPos;
+    float x;
+    float y; 
+    float z;
+};
 
+vec3 camPos(0.0, 0.0, -3.0);
 
 GLFWwindow* initGLFW(int width, int heigth);
 void initGLAD();
