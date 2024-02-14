@@ -72,6 +72,10 @@ void main()
         color = calculateLighting(ray, hit);
     }
 
+    color.x = sin(color.x);
+    color.y = sin(color.y);
+    color.z = sin(color.z);
+
 	FragColor = vec4(color, 1.0);
 }
 

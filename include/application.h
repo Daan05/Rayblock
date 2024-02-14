@@ -7,6 +7,13 @@
 
 #include "shader.h"
 
+struct vec3 {
+    float x = 0.0;
+    float y = 6.0; 
+    float z = -14.0;
+} camPos;
+
+
 GLFWwindow* initGLFW(int width, int heigth);
 void initGLAD();
 

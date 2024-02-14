@@ -1,5 +1,5 @@
 #include "glad/glad.h"
-#include "glfw/glfw3.h"
+#include "GLFW/glfw3.h"
 
 #include <stdio.h>
 
@@ -31,7 +31,7 @@ int main()
         processInput();
 
         // set uniforms
-        setVec3(shader, "camPos", 0.0, 6.0, -14.0);             // player location
+        setVec3(shader, "camPos", camPos.x, camPos.y, camPos.z);             // player location
         setVec3(shader, "orientation", 0.0, -0.5, 1.0);         // direction player is looking
 
         // draw frame

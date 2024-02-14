@@ -45,6 +45,10 @@ void processInput(GLFWwindow* window)
     {
         glfwSetWindowShouldClose(window, 1);
     }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        camPos.x += 0.1;
+    }
 
     // check other inputs
 }
