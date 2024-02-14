@@ -1,26 +1,24 @@
 #include "glad/glad.h"
-#include "GLFW/glfw3.h"
+#include "glfw/glfw3.h"
 
 #include <stdio.h>
 
 #include "application.h"
 #include "shader.h"
 
-unsigned int wWidth = 800;
-unsigned int wHeight = 600;
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+unsigned int wWidth = 1280;
+unsigned int wHeight = 720;
 
 int main()
 {
     // create window
     GLFWwindow* window = initGLFW(wWidth, wHeight);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     initGLAD();
 
     // create shader
-    unsigned int shader = createShaderProgram("shaders/shader.vert", "shaders/shader.frag");
+    unsigned int shader = createShaderProgram("shaders/shader.vert", "shaders/shader.frag"); // shader = 3
     useShader(shader);
+    setVec2(shader, "screenDimensions", wWidth, (float)wHeight);
 
     // create vao and vbo
     unsigned int VAO = createVAO();
@@ -33,7 +31,6 @@ int main()
         processInput();
 
         // set uniforms
-        setVec2(shader, "screenDimensions", (float)wWidth, (float)wHeight);    // screen dimensions
         setVec3(shader, "camPos", 0.0, 6.0, -14.0);             // player location
         setVec3(shader, "orientation", 0.0, -0.5, 1.0);         // direction player is looking
 
@@ -50,11 +47,4 @@ int main()
 
     // clean up glfw
     cleanup();
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    wWidth = width;
-    wHeight = height;
-    glViewport(0, 0, wWidth, wHeight);
 }

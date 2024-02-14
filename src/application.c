@@ -20,6 +20,7 @@ GLFWwindow* initGLFW(int width, int heigth)
     }
     glfwMakeContextCurrent(window);
     glfwSwapInterval(0); // vsync off
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     return window;
 }
@@ -53,3 +54,11 @@ void clearScreen()
     glClearColor(0.0, 0.0, 0.0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    setVec2(3, "screenDimensions", (float)width, (float)height);
+    // the shader program id = 3. if there are more shaders this won't work
+    glViewport(0, 0, width, height);
+}
+
