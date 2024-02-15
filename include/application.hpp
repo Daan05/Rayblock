@@ -1,12 +1,11 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
-
+#pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
 
 #include "shader.hpp"
+#include "camera.hpp"
 
 class Application
 {
@@ -25,6 +24,8 @@ public:
 
     void cleanup();
 
+    void setUniforms();
+
     bool run = true;
 
 private:
@@ -33,10 +34,8 @@ private:
 	unsigned height;
 
 	GLFWwindow* window;
-	//Camera* camera;
+    Camera* camera;
 	Shader* shader;
 };
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-#endif

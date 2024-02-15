@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "application.hpp"
-#include "shader.hpp" // ?
 
 int main()
 {
@@ -17,8 +16,7 @@ int main()
         app.processInput();
 
         // set uniforms
-        //setVec3(shader, "camPos", camPos.x, camPos.y, camPos.z);             // player location
-        //setVec3(shader, "orientation", orientation.x, orientation.y, orientation.z);         // direction player is looking
+        app.setUniforms();
 
         // draw frame
         // for now just a simple scene
