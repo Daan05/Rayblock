@@ -6,7 +6,8 @@ Application::Application(unsigned int wWidth, unsigned int wHeight)
     initGLFW();
     initGLAD();
 
-    // ----------------------------------
+    // ---------------------------------- 
+    /*
     unsigned int VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -29,8 +30,8 @@ Application::Application(unsigned int wWidth, unsigned int wHeight)
 
     // layout (position = 0) in vec2 aPos;
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // ----------------------------------
+    glEnableVertexAttribArray(0); */
+    // ---------------------------------- 
 
     shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
     shader->use();
