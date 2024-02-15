@@ -7,6 +7,9 @@
 #include "shader.hpp"
 #include "camera.hpp"
 
+static unsigned int width;
+static unsigned int height;
+
 class Application
 {
 public:
@@ -29,9 +32,6 @@ public:
     bool run = true;
 
 private:
-
-	unsigned int width;
-	unsigned height;
 
 	GLFWwindow* window;
     Camera* camera;

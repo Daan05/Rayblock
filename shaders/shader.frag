@@ -32,28 +32,28 @@ vec3 calculateLighting(Ray ray, Hit hit);
 void main()
 {
     vec2 uv = (vec2(gl_FragCoord.x / screenDimensions.x, gl_FragCoord.y / screenDimensions.y) - 0.5) * 2; // uv [-1, 1]
-    uv.x *= screenDimensions.x / screenDimensions.y;
-    vec3 color = vec3(0.1);
+    uv.y /= screenDimensions.x / screenDimensions.y;
+    vec3 color = vec3(0.7);
 
     Ray ray;
     ray.origin = camPos;
     vec3 w = normalize(camPos - orientation);
     vec3 u = normalize(cross(vup, w));
     vec3 v = cross(w, u);
-    ray.direction = orientation + uv.x * -u + uv.y * v;
+    ray.direction = normalize(orientation + uv.x * -u * 0.5 + uv.y * v * 0.5);
 
     Sphere sphere1;
-    sphere1.center = vec3(0.0, 1.0, 0.0);
-    sphere1.radius = 1;
+    sphere1.center = vec3(-12.0, 10.0, 0.0);
+    sphere1.radius = 10;
     sphere1.color = vec3(0.2, 0.6, 0.8);
 
     Sphere sphere2;
-    sphere2.center = vec3(0.0, -100.0, 0.0);
-    sphere2.radius = 100;
+    sphere2.center = vec3(12.0, 10.0, 0.0);
+    sphere2.radius = 10;
     sphere2.color = vec3(0.4, 0.9, 0.1);
 
     Hit hit;
-    hit.t = 1000;
+    hit.t = 1000000000;
 
     Hit hits[2];
     hits[0] = sphereIntersection(ray, sphere1);
@@ -61,18 +61,20 @@ void main()
 
     for (int i = 0; i < 2; i++)
     {
-        if (hits[i].t < hit.t && hits[i].t > 0.0001)
+        if (hits[i].t < hit.t && hits[i].t > 5)
         {
             hit = hits[i];
         }
     }
 
-    if (hit.t > 0.0001)
+    if (hit.t > 5 && hit.t < 1000000000)
     {
         color = calculateLighting(ray, hit);
     }
 
 	FragColor = vec4(color, 1.0);
+    // why oval?
+    // https://stackoverflow.com/questions/18174076/raytracing-why-is-my-sphere-rendered-as-an-oval
 }
 
 Hit sphereIntersection(Ray ray, Sphere sphere) {

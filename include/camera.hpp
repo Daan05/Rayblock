@@ -11,13 +11,14 @@
 #include"shader.hpp"
 
 #include <cmath>
+#include <iostream>
 
 class Camera
 {
 public:
-	glm::vec3 Position;
-	glm::vec3 Orientation = glm::vec3(0.0f, -0.5f, 1.0f);
-	glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::vec3 position;
+	glm::vec3 orientation = glm::vec3(0.0f, 0.0f, 1.0f);
+	glm::vec3 vup = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	float yaw;
 	float pitch;
@@ -28,9 +29,9 @@ public:
 	int height;
 
 	float speed = 0.1f;
-	float sensitivity = 100.0f;
+	float sensitivity = 10.0f;
 
-	Camera(int width, int height, glm::vec3 position);
+	Camera(int width, int height, glm::vec3 _position);
 
 	void setUniforms(Shader* shader);
 	void Inputs(GLFWwindow* window);

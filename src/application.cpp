@@ -1,8 +1,10 @@
 #include "application.hpp"
 
 Application::Application(unsigned int wWidth, unsigned int wHeight)
-    : width(wWidth), height(wHeight)
 {
+    width = wWidth;
+    height = wHeight;
+
     initGLFW();
     initGLAD();
 
@@ -34,7 +36,9 @@ Application::Application(unsigned int wWidth, unsigned int wHeight)
 
     shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
     shader->use();
-    camera = new Camera(width, height, glm::vec3(0.0, 1.0, -3.0));
+    camera = new Camera(width, height, glm::vec3(0.0, 10.0, -30.0));
+
+    glUniform2f(glGetUniformLocation(3, "screenDimensions"), width, height);
 }
 
 Application::~Application()
@@ -53,7 +57,7 @@ void Application::initGLFW()
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-    window = glfwCreateWindow(width, height, "3D???", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Rayblock", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -61,7 +65,7 @@ void Application::initGLFW()
         glfwTerminate();
     }
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(0); // vsync off
+    glfwSwapInterval(1); // vsync off
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 
@@ -82,12 +86,14 @@ void Application::processInput()
     }
 
     camera->Inputs(window);
+
+    run = !glfwWindowShouldClose(window);
 }
 
 void Application::clearScreen()
 {
     glClearColor(0.2, 0.2, 0.2, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 void Application::swapBuffers()
@@ -105,9 +111,14 @@ void Application::cleanup()
 void Application::setUniforms()
 {
     camera->setUniforms(shader);
+    camera->width = width;
+    camera->height = height;
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int x, int y)
 {
+    width = x;
+    height = y;
+    glUniform2f(glGetUniformLocation(3, "screenDimensions"), x, y);
     glViewport(0, 0, x, y);
 }

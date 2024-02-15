@@ -7,7 +7,7 @@
 
 int main()
 {
-    Application app(1280, 720);
+    Application app(800, 800);
 
     // main loop
     while(app.run)
