@@ -39,6 +39,29 @@ Application::Application(unsigned int wWidth, unsigned int wHeight)
     camera = new Camera(45, 1, 100, shader->ID, window);
 
     glUniform2f(glGetUniformLocation(3, "screenDimensions"), width, height);
+    
+    // -----------------------
+    int data[50*50*50];
+    for (int i = 0; i < 50; i++)
+    {
+        for (int j = 0; j < 50; j++)
+        {
+            for (int k = 0; k < 50; k++)
+            {
+                if (j < 5 || k == 0)
+                    data[i * 2500 + j * 50 + k] = 1;
+                else 
+                    data[i * 2500 + j * 50 + k] = 0;
+            }
+        }
+    }
+
+    GLuint ssbo;
+    glGenBuffers(1, &ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(data), data, GL_STATIC_DRAW); //sizeof(data) only works for statically sized C/C++ arrays.
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbo);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0); // unbind
 }
 
 Application::~Application()

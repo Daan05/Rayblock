@@ -6,6 +6,10 @@ uniform vec3 lookFrom;
 uniform mat4 invProj;
 uniform mat4 invView;
 
+layout(std430, binding = 1) readonly buffer mybuffer {
+    int vecMap[];
+};
+
 struct Ray
 {
     vec3 origin;
@@ -35,46 +39,104 @@ void main()
     vec3 color = vec3(0.1);
 
     vec4 target = invProj * vec4(uv.x, uv.y, 1, 1);
-	vec3 rayDirection = vec3(invView * vec4(normalize(vec3(target) / target.w), 0)); // World space
-
-    vec3 dir = normalize(rayDirection);
-    float a = 0.5*(dir.y + 1.0);
-    color = (1.0 - a) * vec3(1.0, 1.0, 1.0) + a * vec3(0.5, 0.7, 1.0);
+	vec3 rayDirection = normalize(vec3(invView * normalize(target))); // World space
 
     Ray r;
     r.origin = lookFrom;
     r.direction = rayDirection;
 
-    Sphere s1;
-    s1.center = vec3(2, 0, 2);
-    s1.radius = 1;
-    s1.color = vec3(1, 0, 0);
+    //fillMap();
 
-    Sphere s2;
-    s2.center = vec3(-2, 0, 2);
-    s2.radius = 1;
-    s2.color = vec3(0, 1, 0);
+    // Form ray cast from player into scene
+	vec3 vRayStart = r.origin;
+	vec3 vRayDir = r.direction;
+			
+	// Lodev.org also explains this additional optimistaion (but it's beyond scope of video)
+	vec3 vRayUnitStepSize = { abs(1.0 / vRayDir.x), abs(1.0 / vRayDir.y), abs(1.0 / vRayDir.z) };
+	ivec3 vMapCheck = ivec3(int(vRayStart.x), int(vRayStart.y), int(vRayStart.z));
+	vec3 vRayLength1D;
+	ivec3 vStep;
+	// Establish Starting Conditions
+	if (vRayDir.x < 0)
+	{
+		vStep.x = -1;
+		vRayLength1D.x = (vRayStart.x - float(vMapCheck.x)) * vRayUnitStepSize.x;
+	}
+	else
+	{
+		vStep.x = 1;
+		vRayLength1D.x = (float(vMapCheck.x + 1) - vRayStart.x) * vRayUnitStepSize.x;
+	}
+	if (vRayDir.y < 0)
+	{
+		vStep.y = -1;
+		vRayLength1D.y = (vRayStart.y - float(vMapCheck.y)) * vRayUnitStepSize.y;
+	}
+	else
+	{
+		vStep.y = 1;
+		vRayLength1D.y = (float(vMapCheck.y + 1) - vRayStart.y) * vRayUnitStepSize.y;
+	}
+    if (vRayDir.z < 0)
+	{
+		vStep.z = -1;
+		vRayLength1D.z = (vRayStart.z - float(vMapCheck.z)) * vRayUnitStepSize.z;
+	}
+	else
+	{
+		vStep.z = 1;
+		vRayLength1D.z = (float(vMapCheck.z + 1) - vRayStart.z) * vRayUnitStepSize.z;
+	}
 
-    Hit hits[2];
-    hits[0] = sphereIntersection(r, s1);
-    hits[1] = sphereIntersection(r, s2);
+    ivec3 vMapSize = ivec3(50, 50, 50);
 
-    Hit hit;
-    hit.t = 1000;
-    for (int i = 0; i < 2; i++)
-    {
-        if (hits[i].t < hit.t && hits[i].t > 0.0001)
+	// Perform "Walk" until collision or range check
+	bool bTileFound = false;
+	float fMaxDistance = 512.0;
+	float fDistance = 0.0;
+	while (!bTileFound && fDistance < fMaxDistance)
+	{
+		// Walk along shortest path
+		if (vRayLength1D.x < vRayLength1D.y && vRayLength1D.x < vRayLength1D.z)
+		{
+			vMapCheck.x += vStep.x;
+			fDistance = vRayLength1D.x;
+			vRayLength1D.x += vRayUnitStepSize.x;
+		}
+		else if (vRayLength1D.y < vRayLength1D.z)
+		{
+			vMapCheck.y += vStep.y;
+			fDistance = vRayLength1D.y;
+			vRayLength1D.y += vRayUnitStepSize.y;
+		}
+        else
         {
-            hit = hits[i];
+            vMapCheck.z += vStep.z;
+			fDistance = vRayLength1D.z;
+			vRayLength1D.z += vRayUnitStepSize.z;
         }
-    }
 
-    if (hit.t > 0.0001 && hit.t < 1000)
+		// Test tile at new test point
+		if (vMapCheck.x >= 0 && vMapCheck.x < vMapSize.x && vMapCheck.y >= 0 && vMapCheck.y < vMapSize.y && vMapCheck.z >= 0 && vMapCheck.z < vMapSize.y)
+		{
+		    if (vecMap[vMapCheck.z * 2500 + vMapCheck.y * 50 + vMapCheck.x] == 1)
+		    {
+			    bTileFound = true;
+		    }
+		}
+	}
+	// Calculate intersection location
+	vec3 vIntersection;
+	if (bTileFound)
+	{
+		vIntersection = vRayStart + vRayDir * fDistance;
+	}
+    else 
     {
-        color = calculateLighting(r, hit);
+        vIntersection = vec3(0);
     }
 
-	FragColor = vec4(color, 1.0);
+	FragColor = vec4(vec3(length(vIntersection - lookFrom) * 0.01), 1.0);
 }
 
 Hit sphereIntersection(Ray ray, Sphere sphere) {
