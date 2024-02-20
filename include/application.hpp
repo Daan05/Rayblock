@@ -30,11 +30,14 @@ public:
     void setUniforms();
 
     bool run = true;
+    Camera* camera;
+
+    double lastTime;
+    float ts;
 
 private:
 
 	GLFWwindow* window;
-    Camera* camera;
 	Shader* shader;
 };
 

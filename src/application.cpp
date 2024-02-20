@@ -36,7 +36,7 @@ Application::Application(unsigned int wWidth, unsigned int wHeight)
 
     shader = new Shader("shaders/shader.vert", "shaders/shader.frag");
     shader->use();
-    camera = new Camera(width, height, glm::vec3(0.0, 10.0, -30.0));
+    camera = new Camera(45, 1, 100, shader->ID, window);
 
     glUniform2f(glGetUniformLocation(3, "screenDimensions"), width, height);
 }
@@ -65,7 +65,7 @@ void Application::initGLFW()
         glfwTerminate();
     }
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // vsync off
+    glfwSwapInterval(0); // vsync off
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 
@@ -84,10 +84,10 @@ void Application::processInput()
         glfwSetWindowShouldClose(window, true);
         run = false;
     }
-
-    camera->Inputs(window);
-
     run = !glfwWindowShouldClose(window);
+
+    camera->OnUpdate(ts);
+    camera->resize(width, height);
 }
 
 void Application::clearScreen()
@@ -110,9 +110,7 @@ void Application::cleanup()
 
 void Application::setUniforms()
 {
-    camera->setUniforms(shader);
-    camera->width = width;
-    camera->height = height;
+    camera->setUniforms();
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int x, int y)

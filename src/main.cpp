@@ -9,12 +9,17 @@ int main()
 {
     Application app(800, 800);
 
+    double timePast = glfwGetTime();
+    int frameCount = 0;
+
     // main loop
     while(app.run)
     {
         // handle input
         app.processInput();
 
+        // update stuff
+        
         // set uniforms
         app.setUniforms();
 
@@ -24,8 +29,22 @@ int main()
         app.clearScreen();
         // app. drawFrame();
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
         // swap buffers
         app.swapBuffers();
+
+        // delta time
+        double currentTime = glfwGetTime();
+        app.ts = currentTime - app.lastTime;
+        app.lastTime = currentTime;
+        frameCount++;
+
+        if (timePast + 1.0 < currentTime) // cout fps once per second
+        {
+            std::cout << frameCount << "\n";
+            frameCount = 0;
+            timePast = glfwGetTime();
+        }
     }
 
     // clean up glfw
