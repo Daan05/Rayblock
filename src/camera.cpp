@@ -3,8 +3,8 @@
 Camera::Camera(float verticalFOV, float nearClip, float farClip, unsigned int ID, GLFWwindow* _window)
 	: m_VerticalFOV(verticalFOV), m_NearClip(nearClip), m_FarClip(farClip), shaderID(ID), window(_window)
 {
-	m_ForwardDirection = glm::vec3(0, 0, -1);
-	m_Position = glm::vec3(5, 5, 5);
+	m_ForwardDirection = glm::vec3(0, 0, 1);
+	m_Position = glm::vec3(0, 11, 0);
 }
 
 bool Camera::OnUpdate(float ts)
